@@ -1,7 +1,13 @@
 <html>
   <head>
     <script src="jquery-2.0.3.js"></script>
-    <script src="jSpy.js"></script>
+    <script src="jquery-nowspy.js"></script>
+    <script type="text/javascript">
+      $(function() {
+        $("#scroll").nowspy();  
+      })
+      
+    </script>
     <style>
       div {
         padding: 5px;
@@ -20,8 +26,8 @@
          height: 50px; */
       }
       
-      #scroll.hover {
-        box-shadow: 1px 1px 1px #333;
+      #scroll.spying {
+        box-shadow: 2px 1px 1px #333;
       }
       
       .cf:before,
