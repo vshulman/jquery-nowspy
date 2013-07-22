@@ -6,5 +6,5 @@ The scrollspy only kicks in once the spying element is outside the viewport, and
 The element will be returned to its original position when the viewport allows it.
 
 # Usage
-$("#menu").nowspy();
-the class .spying is added to the spying element when its outside its original position
+```$("#menu").nowspy();```
+the class `.spying` is added to the spying element when its outside its original position

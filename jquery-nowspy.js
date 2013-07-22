@@ -21,6 +21,7 @@ $.fn.isOnScreen = function(attrs) {
 };
 
 $.fn.nowspy = function(log) {
+  var NOWSPY = NOWSPY || {};
   var log = log || false;
   $this = $(this);
   
@@ -30,12 +31,12 @@ $.fn.nowspy = function(log) {
   } 
   
   var height = $this.height(); // element's height
-  var outerHeight = $this.outerHeight() + parseFloat($this.css("marginBottom")); // used to know when to re-show the element
-  var prevPos = $(window).scrollTop(); // initial offset is 0
+  var outerHeight = $this.outerHeight() + parseFloat($this.css("marginTop")); // used to know when to re-show the element
+  NOWSPY.prevPos = $(window).scrollTop(); // initial offset is 0
   
   $(window).scroll(function() {
     var pos = $(this).scrollTop();
-    delta = pos - prevPos; // delta is positive on downwards scroll
+    delta = pos - NOWSPY.prevPos; // delta is positive on downwards scroll
     
     /* if we haven't scrolled past the element in its original position, do nothing */
     
@@ -43,11 +44,12 @@ $.fn.nowspy = function(log) {
        on scroll up, wait until element is in its original position */
     if ((initOffset.bottom > pos && delta > 0) || (initOffset.top > pos && delta < 0)) {
       $this.css("position", "static");
+      $this.css("top", 0); // TODO: set to the original top value
       $this.removeClass("spying");
       return;
     }
     
-    /* element is no longer visible in its static position */
+    /* element is out of its static position */
     var topOffset = $this.position().top;
     
     /* Scroll Up
@@ -62,12 +64,15 @@ $.fn.nowspy = function(log) {
       if (!$this.isOnScreen({partial: true})) {
         $this.css("position","fixed");
         $this.addClass("spying");
-        $this.css("top", - outerHeight - delta);  
+        $this.css("top", -outerHeight);  
+        pos = $(this).scrollTop(); // pos will change as a result of the position css change
       } else { /* element is not fully invisible... */
         
         /* if element is fully visible, stop revealing */
         if ($this.isOnScreen()) { 
           // do nothing
+          // TODO: we should keep revealing the element until its visible by its top-margin
+          
         } else { /* if element is partially visible, continue revealing it until it's fully revealed */
           $this.css("top", Math.min(topOffset - delta,0));
         }
@@ -86,6 +91,6 @@ $.fn.nowspy = function(log) {
       }
     }
     
-    prevPos = pos;
+    NOWSPY.prevPos = pos;
   });
 };
